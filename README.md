@@ -1,3 +1,5 @@
+![Logo: Geometric interpretation of the Kindlifresserbrunnen](logo/effiddy-banner.png)
+
 # effiddy
 A 50-key, column-staggered, wireless split keyboard, inspired by Totem.
 
