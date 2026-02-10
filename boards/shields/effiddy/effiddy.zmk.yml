@@ -1,0 +1,12 @@
+file_format: "1"
+id: effiddy
+name: effiddy
+type: shield
+url: https://github.com/shoedler/effiddy
+requires: [nice_nano_v2]
+features:
+  - keys
+  - studio
+siblings:
+  - effiddy_left
+  - effiddy_right

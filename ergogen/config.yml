@@ -1,0 +1,334 @@
+meta:
+  engine: 4.2.1
+
+units:
+  keycap_outline_pad: 2 
+  mcu_outline_pad: 0.2
+
+  # Config
+  mcu_w: 17.78 # ProMicro width
+  mcu_h: 33 # ProMicro height
+  bat_w: 16 # Battery width
+  bat_h: 41 # Battery height
+
+  # keyplate_d: 2.2 # 2.2mm thickness for Chocs
+
+points:
+  key.tags: key
+  key.padding: cy
+  key.spread: cx
+  zones:
+    main:
+      anchor:
+        shift: [150, -150] # Fix KiCad placement
+      columns:
+        c0: # Outer
+          rows.r4: $unset
+          rows.r3: $unset
+        c1: # Pinky
+          key.stagger: 2
+        c2: # Ring
+          key.splay: -2
+          key.spread: cx+.25
+          key.stagger: 10
+        c3: # Middle
+          key.spread: cx+.25
+          key.stagger: 4
+        c4: # Index
+          key.stagger: -4
+        c5: # Inner
+          key.stagger: -5
+      rows:
+        r1: # Bottom
+        r2: # Home
+        r3: # Above
+        r4: # Nums
+    thumb:
+      anchor:
+        ref: main_c5_r1
+        shift: [-.9cx, -1.05cy]
+      columns:
+        c3: # Thumb-outer
+          key.splay: -10
+        c4: # Thumb-middle
+          key.spread: 20
+          key.splay: -9
+          key.origin: [-12, -9]
+        c5: # Thumb-inner
+          key.spread: 20
+          key.splay: -24
+          key.origin: [-10, -8]
+      rows:
+        r0: # Thumb
+    mcu:
+      key.tags:
+        - helper
+      anchor:
+        - ref: main_c5_r4
+          shift: [mcu_w/2+cx/2 + 1.5, -mcu_h/2+cy/2 + .5]
+    jst:
+      key.tags:
+        - helper
+      anchor:
+        - ref: main_c1_r4
+          rotate: 270
+          shift: [6,cy/2+5]
+    battery:
+      key.tags:
+        - helper
+      anchor:
+        - ref: main_c0_r2
+          shift: [-0.5, bat_h-cy/2]
+    screw_1:
+      key.tags: 
+        - helper
+        - screw
+      anchor:
+        aggregate.parts:
+          - ref: main_c2_r3
+          - ref: main_c2_r4
+          - ref: main_c1_r3
+          - ref: main_c1_r4
+        shift: [0, 17]
+    screw_2:
+      key.tags:
+        - helper
+        - screw
+      anchor:
+        aggregate.parts:
+          - ref: main_c5_r4
+          - ref: main_c5_r3
+          - ref: main_c4_r4
+          - ref: main_c4_r3
+        shift: [0,-2.5]
+    screw_3:
+      key.tags:
+        - helper
+        - screw
+      anchor:
+        aggregate.parts:
+          - ref: main_c0_r1
+          - ref: main_c0_r2
+          - ref: main_c1_r1
+          - ref: main_c1_r2
+        shift: [0, -3]
+    screw_4:
+      key.tags:
+        - helper
+        - screw
+      anchor:
+        aggregate.parts:
+          - ref: thumb_c4_r0
+          - ref: thumb_c5_r0
+          - ref: main_c5_r1
+        shift: [9.5,2]
+    screw_5:
+      key.tags:
+        - helper
+        - screw
+      anchor:
+        aggregate.parts:
+          - ref: main_c4_r2
+          - ref: main_c4_r1
+          - ref: main_c3_r2
+          - ref: main_c3_r1
+        shift: [0,-3]
+    screw_6:
+      key.tags:
+        - helper
+        - screw
+      anchor:
+        ref: mcu
+        shift: [0, -23]
+
+outlines:
+  heufti_pcb:
+    - where: [key]
+      what: rectangle
+      size: [cx+1, cy+1]
+    - where: [main_c4_r1]
+      what: rectangle
+      size: [cx+5, cy+5]
+    - where: [mcu]
+      what: rectangle
+      size: [mcu_w, mcu_h]
+    - where: [main_c1_r4] # Fill gap from splay (pinky|ring)
+      what: rectangle
+      size: [cx+5, (cy+1)*3]
+      adjust.shift: [5/2,-(cy+1)]
+    - where: [main_c2_r4] # Fill gap from splay (ring|middle)
+      what: rectangle
+      size: [cx+5, (cy+1)*3]
+      adjust.shift: [5/2, -(cy+1)]
+    - where: [main_c1_r4]
+      what: rectangle
+      size: [cx+4, 15]
+      adjust.shift: [1.5, 10]
+    - what: polygon
+      points:
+        - ref: mcu # Mcu
+          shift: [mcu_w/2+mcu_outline_pad, -70]
+        - ref: mcu 
+          shift: [mcu_w/2+mcu_outline_pad, mcu_h/2+mcu_outline_pad]
+        - ref: mcu
+          shift: [-mcu_w - 50, mcu_h/2+mcu_outline_pad]
+        - ref: main_c4_r4 # Thumb cluster
+        - ref: thumb_c3_r0
+          shift: [-(cx+1)/2, (cy+1)/2]
+        - ref: thumb_c3_r0
+          shift: [-(cx+1)/2, -(cy+1)/2]
+        - ref: thumb_c4_r0
+          shift: [-(cx+1)/2, -(cy+1)/2]
+        - ref: thumb_c5_r0
+          shift: [-(cx+1)/2, -(cy+1)/2]
+        - ref: thumb_c5_r0
+          shift: [(cx+1)/2, (cy+1)/2]
+        
+  _pcb_keycaps:
+    - where: [key]
+      what: rectangle
+      size: [cx-.5, cy-.5]
+      fillet: 1
+    - where: [thumb]
+      what: rectangle
+      size: [cx-.5, cy-.5]
+      fillet: 1
+  _pcb_mcu:
+    - where: [mcu]
+      what: rectangle
+      size: [mcu_w, mcu_h]
+    - where: [mcu]
+      what: rectangle
+      size: [8.94, 7.35]
+      operation: stack
+      adjust.shift: [0, mcu_h/2-7.35/2+0.7]
+  _pcb_jst:
+    - where: [jst]
+      what: rectangle
+      size: [6.9, 12.35]
+      adjust.shift: [0, -4.4]
+  _pcb_battery:
+    - where: [battery]
+      what: rectangle
+      size: [bat_w, bat_h]
+  _pcb_screws:
+    - where: [screw]
+      what: circle
+      radius: 4.3/2
+  preview_assembly:
+    - what: outline
+      name: heufti_pcb
+    - what: outline
+      name: _pcb_keycaps
+      operation: stack
+    - what: outline
+      name: _pcb_mcu
+      operation: stack
+    - what: outline
+      name: _pcb_screws
+      operation: stack
+    - what: outline
+      name: _pcb_battery
+      operation: stack
+    - what: outline
+      name: _pcb_jst
+      operation: stack
+
+pcbs:
+  heufti:
+    template: kicad8
+    outlines:
+      main:
+        outline: heufti_pcb
+    footprints:
+      gnd_zone:
+        what: ceoloide/utility_filled_zone
+        params:
+          side: 'F&B'
+          points: [[120,60],[300,60],[300,210],[120,210]]
+          remove_islands: 'below_area_limit'
+          min_island_size: 6
+      keyswitches:
+        where: [key]
+        what: ceoloide/switch_choc_v1_v2
+        params:
+          from: "{{colrow}}"
+          to: "{{col.name}}"
+          hotswap: true
+          choc_v1_support: true
+          include_stabilizer_pad: false
+
+          include_plated_holes: true
+          include_centerhole_net: true
+
+          hotswap_pads_same_side: false
+          locked_traces_vias: true # Not movable
+          outer_pad_width_front: 2
+          outer_pad_width_back: 2
+          reversible: true
+        adjust.rotate: 180
+      diodes:
+        where: /key/
+        what: ceoloide/diode_tht_sod123
+        params:
+          from: "{{colrow}}"
+          to: "{{row}}"
+          reversible: true
+          include_traces_vias: true
+        adjust:
+          shift: [0, 3.5]
+          rotate: 0
+      mcu:
+        what: ceoloide/mcu_supermini_nrf52840
+        where: mcu
+        params:
+          reversible: true
+          only_required_jumpers: true
+          P10: "r0"
+          P3: "r1"
+          P4: "r2"
+          P5: "r3"
+          P2: "r4"
+          P15: "c0"
+          P18: "c1"
+          P16: "c2"
+          P8: "c3"
+          P9: "c4"
+          P19: "c5"
+          P6: "DA"
+          P7: "CL"
+          P14: "CS"
+          P20_label: " "
+          P21_label: " "
+          use_rectangular_jumpers: false
+      battery_connector:
+        what: ceoloide/battery_connector_jst_ph_2
+        where: jst
+        params:
+          reversible: true
+        adjust:
+      on_off_switch:
+        what: ceoloide/power_switch_smd_side
+        where: mcu
+        params:
+          from: BAT_P
+          to: RAW
+          reversible: true
+        adjust:
+          shift: [-15, mcu_h/2-2]
+          rotate: 90
+      reset_switch:
+        what: ceoloide/reset_switch_smd_side
+        where: mcu
+        params:
+          reversible: true
+          include_bosses: true
+          include_silkscreen: true
+          include_courtyard: true
+        adjust.shift: [-25, mcu_h/2-2.5]
+      screws:
+        what: ceoloide/mounting_hole_npth
+        where: /screw/
+        params:
+          hole_size: 3
+          hole_drill: 2.2
