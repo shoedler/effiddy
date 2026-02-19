@@ -11,7 +11,8 @@ units:
   bat_w: 16 # Battery width
   bat_h: 41 # Battery height
 
-  # keyplate_d: 2.2 # 2.2mm thickness for Chocs
+  switch_dim: 14.2 # +.2 for 3D printing errors
+  switchplate_d: 2.2 # 2.2mm thickness for Chocs
 
 points:
   key.tags: key
@@ -72,7 +73,7 @@ points:
       anchor:
         - ref: main_c1_r4
           rotate: 270
-          shift: [6,cy/2+5]
+          shift: [6, cy/2+5]
     battery:
       key.tags:
         - helper
@@ -142,7 +143,7 @@ points:
         shift: [0, -23]
 
 outlines:
-  heufti_pcb:
+  effiddy_pcb:
     - where: [key]
       what: rectangle
       size: [cx+1, cy+1]
@@ -156,10 +157,6 @@ outlines:
       what: rectangle
       size: [cx+5, (cy+1)*3]
       adjust.shift: [5/2,-(cy+1)]
-    - where: [main_c2_r4] # Fill gap from splay (ring|middle)
-      what: rectangle
-      size: [cx+5, (cy+1)*3]
-      adjust.shift: [5/2, -(cy+1)]
     - where: [main_c1_r4]
       what: rectangle
       size: [cx+4, 15]
@@ -183,13 +180,9 @@ outlines:
           shift: [-(cx+1)/2, -(cy+1)/2]
         - ref: thumb_c5_r0
           shift: [(cx+1)/2, (cy+1)/2]
-        
+
   _pcb_keycaps:
     - where: [key]
-      what: rectangle
-      size: [cx-.5, cy-.5]
-      fillet: 1
-    - where: [thumb]
       what: rectangle
       size: [cx-.5, cy-.5]
       fillet: 1
@@ -217,7 +210,7 @@ outlines:
       radius: 4.3/2
   preview_assembly:
     - what: outline
-      name: heufti_pcb
+      name: effiddy_pcb
     - what: outline
       name: _pcb_keycaps
       operation: stack
@@ -234,12 +227,42 @@ outlines:
       name: _pcb_jst
       operation: stack
 
+  _case_plate:
+    - what: outline
+      name: effiddy_pcb
+    - where: [key]
+      what: rectangle
+      size: switch_dim
+      operation: subtract
+    - where: [thumb]
+      what: rectangle
+      size: switch_dim
+      operation: subtract
+    - where: [screw]
+      what: circle
+      radius: 1.2
+      operation: subtract
+    - where: [jst]
+      what: rectangle
+      size: [10,20]
+      adjust.shift: [-1,-8]
+      operation: subtract
+    - where: [mcu]
+      what: rectangle
+      size: [mcu_w, mcu_h]
+      operation: subtract
+    - what: rectangle # Mask to remove floater
+      where: [mcu]
+      size: [20, 40]
+      adjust.shift: [(20-mcu_w)/2, 0]
+      operation: subtract
+
 pcbs:
-  heufti:
+  effiddy:
     template: kicad8
     outlines:
       main:
-        outline: heufti_pcb
+        outline: effiddy_pcb
     footprints:
       gnd_zone:
         what: ceoloide/utility_filled_zone
@@ -332,3 +355,9 @@ pcbs:
         params:
           hole_size: 3
           hole_drill: 2.2
+
+cases:
+  switchplate:
+    - what: outline
+      name: _case_plate
+      extrude: switchplate_d

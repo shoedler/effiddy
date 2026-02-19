@@ -81,7 +81,7 @@
         "item_on_disabled_layer": "error",
         "items_not_allowed": "error",
         "length_out_of_range": "error",
-        "lib_footprint_issues": "ignore",
+        "lib_footprint_issues": "warning",
         "lib_footprint_mismatch": "warning",
         "malformed_courtyard": "error",
         "microvia_drill_out_of_range": "error",
@@ -226,7 +226,9 @@
     "equivalence_files": []
   },
   "libraries": {
-    "pinned_footprint_libs": [],
+    "pinned_footprint_libs": [
+      "Keyboard_Building"
+    ],
     "pinned_symbol_libs": []
   },
   "meta": {
@@ -269,7 +271,7 @@
       "plot": "gerber",
       "pos_files": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "effiddy-3d.step",
       "svg": "",
       "vrml": ""
     },
