@@ -12,3 +12,6 @@ An **effigy** is a physical representation of an idea, identity, or belief, ofte
 The design and name are inspired by the **Kindlifresserbrunnen** (Child-Eater Fountain) in Bern, Switzerland:
 a striking, unsettling effigy that embodies folklore, symbolism, and cultural memory.
 Effiddy adopts this spirit in a minimalist, abstract form — part artifact, part tool.
+
+![effiddy PCB render](kicad/effiddy-3d-render-1.png)
+![effiddy PCB render](kicad/effiddy-3d-render-2.png)
