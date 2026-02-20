@@ -21,7 +21,7 @@
 
         sym {
             bindings = <
-           &none     &none     &none     &none     &none          &none      &none      &none      &none      &none
+           &none     &none     &none     &none     &none          &ESC       &DEL       &none      &none      &none
            &none     &none     &none     &none     &none          &none      &none      &none      &none      &none
 &kp GRAVE  &kp FSLH  &kp LT    &kp LBRC  &kp LPAR  &kp LBKT       &kp RBKT   &kp RPAR   &kp RBRC   &kp GT     &kp BSLH  &kp GRAVE
 &kp TILDE  &kp AT    &kp HASH  &kp STAR  &kp PLUS  &kp EXCL       &kp QMARK  &kp MINUS  &kp UNDER  &kp EQUAL  &kp PIPE  &kp SQT
@@ -43,8 +43,8 @@
             bindings = <
        &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4       &none  &none  &none  &none  &studio_unlock
        &none         &none         &none         &none         &none              &none  &none  &none  &none  &bt BT_CLR
-&none  &none         &none         &none         &none         &none              &none  &none  &none  &none  &none  &none
-&none  &none         &none         &none         &none         &none              &none  &none  &none  &none  &none  &none
+&none  &none         &none         &none         &none         &none              &none  &none  &none  &none  &none           &none
+&none  &none         &none         &none         &none         &none              &none  &none  &none  &none  &none           &none
                                         &none         &none         &none              &none  &none  &none
             >;
         };
