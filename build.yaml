@@ -22,21 +22,21 @@ include:
   - board: nice_nano_v2
     shield: effiddy_left
     snippet: studio-rpc-usb-uart
-    cmake-args: -DCONFIG_ZMK_STUDIO=y -DKEYMAP_FILE=../../config/boards/shields/shoedler54/shoedler54_de_ch.keymap
-    artifact-name: shoedler54_left_de_ch
+    cmake-args: -DCONFIG_ZMK_STUDIO=y -DKEYMAP_FILE=../../config/boards/shields/effiddy/effiddy_de_ch.keymap
+    artifact-name: effiddy_left_de_ch
   - board: nice_nano_v2
     shield: effiddy_right
-    cmake-args: -DKEYMAP_FILE=../../config/boards/shields/shoedler54/shoedler54_de_ch.keymap
-    artifact-name: shoedler54_right_de_ch
+    cmake-args: -DKEYMAP_FILE=../../config/boards/shields/effiddy/effiddy_de_ch.keymap
+    artifact-name: effiddy_right_de_ch
   - board: nice_nano_v2
     shield: effiddy_left
     snippet: studio-rpc-usb-uart
-    cmake-args: -DCONFIG_ZMK_STUDIO=y -DKEYMAP_FILE=../../config/boards/shields/shoedler54/shoedler54_en.keymap
-    artifact-name: shoedler54_left_en
+    cmake-args: -DCONFIG_ZMK_STUDIO=y -DKEYMAP_FILE=../../config/boards/shields/effiddy/effiddy_en.keymap
+    artifact-name: effiddy_left_en
   - board: nice_nano_v2
     shield: effiddy_right
-    cmake-args: -DKEYMAP_FILE=../../config/boards/shields/shoedler54/shoedler54_en.keymap
-    artifact-name: shoedler54_right_en
+    cmake-args: -DKEYMAP_FILE=../../config/boards/shields/effiddy/effiddy_en.keymap
+    artifact-name: effiddy_right_en
   - board: nice_nano_v2
     shield: settings_reset
     artifact-name: settings_reset
