@@ -32,8 +32,8 @@ underside_pocket_z   = 1.9;   // cavity depth from bottom (inside hollow depth)
 side_fillet_start_z  = 2.2;   // z where outer “inset/taper” begins
 
 /* Top inset / touch surface shaping */
-inset_lr         = 2.0;   // inset on left/right at the very top (X border)
-inset_tb         = 2.0;   // inset on top/bottom at the very top (Y border) (your 2mm->1mm feel)
+inset_lr         = 1.9;   // inset on left/right at the very top (X border)
+inset_tb         = 1.9;   // inset on top/bottom at the very top (Y border) (your 2mm->1mm feel)
 dish_depth       = 1.0;   // concavity depth at center (approx)
 dish_span_scale  = 0.95;  // how wide the dish influences (0..1), smaller = more localized
 
