@@ -151,7 +151,7 @@ points:
       anchor:
         ref: mcu
         shift: [0, -23]
-    screw_7:
+    screw_7: 
       key.tags:
         - helper
         - screw
@@ -199,7 +199,7 @@ outlines:
           shift: [-(cx+1)/2, -(cy+1)/2]
         - ref: thumb_c5_r0
           shift: [(cx+1)/2, (cy+1)/2]
-
+        
   #
   # Pcb preview outlines
   #
@@ -256,7 +256,7 @@ outlines:
   # 
 
   # Basic switchplate outline
-  _case_plate:
+  _case_plate: 
     - what: outline
       name: effiddy_pcb
     - where: [key]
@@ -459,8 +459,8 @@ outlines:
   # Case bottom plate outlines
   #
 
-  # Hotswap socket
-  _casebottom_hss_shape:
+  # Hotswap (right) socket
+  _casebottom_hss_right_shape: 
     - what: rectangle # 14x7.2 measured outline
       size: [14, 3] # 7.2-5 = 2.2 + .7 pad
     - what: rectangle
@@ -472,11 +472,29 @@ outlines:
     - what: rectangle
       size: [5,5]
       adjust.shift: [-2.2, 5/2]
-  # Hotswap socket, relatively positioned
-  _casebottom_hss_raw:
+  # Hotswap (right) socket, relatively positioned
+  _casebottom_hss_right_raw:
     - what: outline
-      name: _casebottom_hss_shape
+      name: _casebottom_hss_right_shape
       adjust.shift: [2.5,-4.9] # Relative to key center
+  # Hotswap (left) socket
+  _casebottom_hss_left_shape: 
+    - what: rectangle # 14x7.2 measured outline
+      size: [14, 3] # 7.2-5 = 2.2 + .7 pad
+    - what: rectangle
+      size: [14/2, 5]
+      adjust.shift: [14/4,-5/4]
+    - what: rectangle
+      size: [14/2, 5]
+      adjust.shift: [-14/4,5/4]
+    - what: rectangle
+      size: [5,5]
+      adjust.shift: [2.2, 5/2]
+  # Hotswap (left) socket, relatively positioned
+  _casebottom_hss_left_raw:
+    - what: outline
+      name: _casebottom_hss_left_shape
+      adjust.shift: [-2.5,-4.9] # Relative to key center
   # Switch peg + diode, relatively positioned
   _casebottom_peg_diode_raw:
     - what: circle
@@ -484,10 +502,18 @@ outlines:
     - what: rectangle
       size: [5, 2.6]
       adjust.shift: [0, 3.3]
-  # All switch component cutouts
-  _casebottom_switch_components_cutout:
+  # All switch component cutouts (right half)
+  _casebottom_switch_components_right_cutout:
     - what: outline
-      name: _casebottom_hss_raw
+      name: _casebottom_hss_right_raw
+      fillet: 1
+    - what: outline
+      name: _casebottom_peg_diode_raw
+      fillet: 1
+  # All switch component cutouts (left half)
+  _casebottom_switch_components_left_cutout:
+    - what: outline
+      name: _casebottom_hss_left_raw
       fillet: 1
     - what: outline
       name: _casebottom_peg_diode_raw
@@ -589,11 +615,26 @@ outlines:
     - what: outline
       name: _casebottom_plate_base
       operation: subtract
-  # Bottom cutouts
-  _casebottom_cutouts:
+  # Bottom cutouts (right half)
+  _casebottom_right_cutouts:
     - where: [key]
       what: outline
-      name: _casebottom_switch_components_cutout
+      name: _casebottom_switch_components_right_cutout
+    - what: outline
+      name: _casebottom_bat_cage_cutouts
+    - what: outline
+      name: _casebottom_io_cutout
+    - where: [pcb_screw] # PCB screw holes
+      what: circle
+      radius: screw_inserthole_r
+    - where: [screw_6] # Mcu screw hole
+      what: circle
+      radius: screw_throughhole_r
+  # Bottom cutouts (left half)
+  _casebottom_left_cutouts:
+    - where: [key]
+      what: outline
+      name: _casebottom_switch_components_left_cutout
     - what: outline
       name: _casebottom_bat_cage_cutouts
     - what: outline
@@ -606,14 +647,14 @@ outlines:
       radius: screw_throughhole_r
   # All solder recesses
   _casebottom_solder_recesses:
-    - what: outline
+    - what: outline 
       name: _casebottom_mcu_solder_recess
-    - what: outline
+    - what: outline 
       name: _casebottom_jst_solder_recess
   # Preview
   preview_case_bottom:
     - what: outline
-      name: _casebottom_cutouts
+      name: _casebottom_right_cutouts
     - what: outline
       name: _casebottom_wall
       operation: stack
@@ -623,10 +664,25 @@ outlines:
     - what: outline
       name: _casebottom_bat_cage_screw_standoff
       operation: stack
-    - what: outline
+    - what: outline 
       name: _casebottom_solder_recesses
       operation: stack
-
+  # Preview
+  preview_case_bottom_left:
+    - what: outline
+      name: _casebottom_left_cutouts
+    - what: outline
+      name: _casebottom_wall
+      operation: stack
+    - what: outline
+      name: _casebottom_bat_cage_base
+      operation: stack
+    - what: outline
+      name: _casebottom_bat_cage_screw_standoff
+      operation: stack
+    - what: outline 
+      name: _casebottom_solder_recesses
+      operation: stack
 pcbs:
   effiddy:
     template: kicad8
@@ -650,8 +706,10 @@ pcbs:
           hotswap: true
           choc_v1_support: true
           include_stabilizer_pad: false
+
           include_plated_holes: true
           include_centerhole_net: true
+
           hotswap_pads_same_side: false
           locked_traces_vias: true # Not movable
           outer_pad_width_front: 2
@@ -766,7 +824,7 @@ cases:
       extrude: 5
       operation: subtract
 
-  effiddy_case_bottom:
+  effiddy_case_bottom_right:
     - what: outline
       name: _casebottom_plate_footprint
       extrude: 2+1.6
@@ -788,6 +846,32 @@ cases:
       operation: subtract
 
     - what: outline
-      name: _casebottom_cutouts
+      name: _casebottom_right_cutouts
+      extrude: 2+1.6
+      operation: subtract
+
+  effiddy_case_bottom_left:
+    - what: outline
+      name: _casebottom_plate_footprint
+      extrude: 2+1.6
+    - what: outline
+      name: _casebottom_plate_base
+      extrude: 1.6
+      operation: subtract
+    - what: outline
+      name: _casebottom_bat_cage_base
+      extrude: 1
+      operation: subtract
+    - what: outline
+      name: _casebottom_bat_cage_screw_standoff
+      extrude: 2+1.6
+
+    - what: outline
+      name: _casebottom_solder_recesses
+      extrude: 1.1+1.6
+      operation: subtract
+
+    - what: outline
+      name: _casebottom_left_cutouts
       extrude: 2+1.6
       operation: subtract

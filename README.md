@@ -125,3 +125,5 @@ For each half:
 - nickcoutsos Keymap-layout-tools: https://nickcoutsos.github.io/keymap-layout-tools/
 - Joel Spadins zmk-locale-generator for the de-swiss keycode header: https://github.com/joelspadin/zmk-locale-generator
 - ZMK guide on how to add a new shield: https://zmk.dev/docs/development/hardware-integration/new-shield
+- More of my keyboards:
+  - shoedler54 - a cheap 54-key wireless split, inspired by the ZSA Voyager: https://github.com/shoedler/shoedler54
