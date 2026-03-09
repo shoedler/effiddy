@@ -14,6 +14,10 @@ units:
   switch_dim: 14.2 # +.2 for 3D printing errors
   switchplate_d: 2.2 # 2.2mm thickness for Chocs
 
+  screw_inserthole_r: 1.65
+  screw_throughhole_r: 1.2
+  screw_standoff_r: 3.1
+
 points:
   key.tags: key
   key.padding: cy
@@ -84,6 +88,7 @@ points:
       key.tags: 
         - helper
         - screw
+        - pcb_screw
       anchor:
         aggregate.parts:
           - ref: main_c2_r3
@@ -95,6 +100,7 @@ points:
       key.tags:
         - helper
         - screw
+        - pcb_screw
       anchor:
         aggregate.parts:
           - ref: main_c5_r4
@@ -106,6 +112,7 @@ points:
       key.tags:
         - helper
         - screw
+        - pcb_screw
       anchor:
         aggregate.parts:
           - ref: main_c0_r1
@@ -117,6 +124,7 @@ points:
       key.tags:
         - helper
         - screw
+        - pcb_screw
       anchor:
         aggregate.parts:
           - ref: thumb_c4_r0
@@ -127,6 +135,7 @@ points:
       key.tags:
         - helper
         - screw
+        - pcb_screw
       anchor:
         aggregate.parts:
           - ref: main_c4_r2
@@ -138,11 +147,21 @@ points:
       key.tags:
         - helper
         - screw
+        - case_screw
       anchor:
         ref: mcu
         shift: [0, -23]
+    screw_7:
+      key.tags:
+        - helper
+        - screw
+        - case_screw
+      anchor:
+        ref: main_c1_r4
+        shift: [-cx-7.5, cy-.8]
 
 outlines:
+  # Reference Pcb outline
   effiddy_pcb:
     - where: [key]
       what: rectangle
@@ -181,6 +200,10 @@ outlines:
         - ref: thumb_c5_r0
           shift: [(cx+1)/2, (cy+1)/2]
 
+  #
+  # Pcb preview outlines
+  #
+
   _pcb_keycaps:
     - where: [key]
       what: rectangle
@@ -208,6 +231,7 @@ outlines:
     - where: [screw]
       what: circle
       radius: 4.3/2
+  # Preview
   preview_assembly:
     - what: outline
       name: effiddy_pcb
@@ -227,6 +251,11 @@ outlines:
       name: _pcb_jst
       operation: stack
 
+  #
+  # Case top outlines
+  # 
+
+  # Basic switchplate outline
   _case_plate:
     - what: outline
       name: effiddy_pcb
@@ -240,7 +269,7 @@ outlines:
       operation: subtract
     - where: [screw]
       what: circle
-      radius: 1.2
+      radius: screw_throughhole_r
       operation: subtract
     - where: [jst]
       what: rectangle
@@ -256,6 +285,347 @@ outlines:
       size: [20, 40]
       adjust.shift: [(20-mcu_w)/2, 0]
       operation: subtract
+  # Basic case mask, base for outline
+  _case_mask:
+    - what: outline
+      name: effiddy_pcb
+    - where: main_c0_r2 # Space for bat
+      what: rectangle
+      size: [cx+2, (cy+2)*3]
+      adjust.shift: [.5, 25]
+    - where: main_c1_r1 # Cover below ring/middle cols
+      what: rectangle
+      size: [(cx+2)*4, cy+2]
+      adjust.shift: [20, .5]
+  # Case wall mask: Serves as a subtraction shape for the wall
+  _case_wall_mask:
+    - what: outline
+      name: _case_mask
+      expand: .2>
+  # Case outline; Case shape when viewed from the top
+  _case_outline: 
+    - what: outline
+      name: _case_mask
+      expand: 2.2>
+  # Case wall: case outline minus case wall mask
+  _case_wall:
+    - what: outline
+      name: _case_outline
+    - what: outline
+      name: _case_wall_mask
+      operation: subtract
+  # Case wall hug: same as wall, but no gap to PCB
+  _case_wall_hug:
+    - what: outline
+      name: _case_outline
+    - what: outline
+      name: _case_mask
+      operation: subtract
+  # Cutout to make space for key matrix
+  _case_key_mask:
+    - where: [key]
+      what: rectangle
+      size: [cx+1, cy+1]
+    - where: [main_c1_r4] # Fill gap from splay (pinky|ring)
+      what: rectangle
+      size: [cx+2, cy*3.4]
+      adjust.shift: [2,-1.17*cy]
+  # Case outline with cutout for keys
+  _case_outline_keyless:
+    - what: outline
+      name: _case_outline
+    - what: outline
+      name: _case_key_mask
+      operation: subtract
+  # Case boxes: The "boxes" for containing Bat + Mcu
+  _case_boxes:
+    - what: outline
+      name: _case_outline_keyless
+    - where: main_c3_r4 # Above ring, middle, index
+      what: rectangle
+      size: [cx*4+1.000001+.25,13]
+      adjust.shift: [cx/2-.25/2, 5]
+      operation: subtract
+    - where: main_c1_r4 # Little nibble above pinky (above JST)
+      what: rectangle
+      size: [10,10]
+      adjust.shift: [10,24.7]
+      operation: subtract
+    - where: main_c0_r1 # Bottom left edges
+      what: rectangle
+      size: [cx*3+1, cy*3+1]
+      operation: subtract
+    - where: thumb_c3_r0 # Left of outer thumb
+      what: rectangle
+      size: [cx+5.5, cy+20]
+      operation: subtract # Middle thumb
+    - where: thumb_c4_r0
+      what: rectangle
+      size: [cx+10.4, cy+7]
+      operation: subtract
+    - where: thumb_c5_r0
+      what: rectangle
+      size: [cx+10.5, cy+7]
+      operation: subtract
+    - where: main_c5_r1
+      what: rectangle
+      size: [cx+1, cy+8]
+      operation: subtract
+  # Case box negatives: Cutout for Mcu
+  _case_boxes_negative_mcu:
+    - where: [mcu]
+      what: rectangle
+      size: [mcu_w, mcu_h]
+    - where: [mcu]
+      what: rectangle
+      size: [8.94, 7.35]
+      adjust.shift: [0, mcu_h/2]
+      expand: .5]
+  # Case box negatives: Cutout for Bat + Jst
+  _case_boxes_negative_bat_jst:
+    - where: [jst]
+      what: rectangle
+      size: [7.5, 21]
+      adjust.shift: [.25, -8.5]
+    - what: outline
+      name: _pcb_battery
+  # Case box negatives: HSI standoff for Bat Box screw
+  _case_boxes_screw_standoff_bat:
+    - where: [screw_7]
+      what: circle
+      radius: screw_standoff_r
+  # Case box negatives: HSI standoff hole for Bat Box screw 
+  _case_boxes_screw_standoff_bat_hole:
+    - where: [screw_7]
+      what: circle
+      radius: screw_inserthole_r
+  # Case box negatives: HSI hole for screw 1
+  _case_boxes_screw_standoff_mcu_hole:
+    - where: [screw_6]
+      what: circle
+      radius: screw_inserthole_r
+  # Case box patch for bottom
+  _case_boxes_bottom_patch:
+    - where: [thumb_c3_r0]
+      what: rectangle
+      size: [4,11]
+      adjust.shift: [-cx/2-2, 6.8]
+  # Case plate patch for screw 1, since it is unused
+  _case_plate_screw_1_patch:
+    - where: [screw_1]
+      what: circle
+      radius: screw_throughhole_r
+  # Preview
+  preview_case_top:
+    - where: [key]
+      what: rectangle
+      size: [cx-.5, cy-.5] # https://keycapsss.com/KEA-Low-Profile-Keycaps-for-Choc-V1-3D-Printed-MX-Spaced/KC10244.10
+      fillet: .5
+      operation: stack
+    - what: outline
+      name: _case_wall_hug
+      operation: stack
+    - what: outline
+      name: _case_boxes
+      operation: stack
+    - what: outline
+      name: _case_boxes_negative_mcu
+      operation: stack
+    - what: outline
+      name: _case_boxes_negative_bat_jst
+      operation: stack
+    - what: outline
+      name: _case_boxes_screw_standoff_bat
+      operation: stack
+    - what: outline
+      name: _case_boxes_screw_standoff_bat_hole
+      operation: stack
+    - what: outline
+      name: _case_boxes_screw_standoff_mcu_hole
+      operation: stack
+    - what: outline
+      name: _case_boxes_bottom_patch
+      operation: stack
+    - what: outline
+      name: _case_plate_screw_1_patch
+      operation: stack
+    - where: [screw_7]
+      what: circle
+      radius: 2.2/2
+      operation: stack
+
+
+  #
+  # Case bottom plate outlines
+  #
+
+  # Hotswap socket
+  _casebottom_hss_shape:
+    - what: rectangle # 14x7.2 measured outline
+      size: [14, 3] # 7.2-5 = 2.2 + .7 pad
+    - what: rectangle
+      size: [14/2, 5]
+      adjust.shift: [14/4,5/4]
+    - what: rectangle
+      size: [14/2, 5]
+      adjust.shift: [-14/4,-5/4]
+    - what: rectangle
+      size: [5,5]
+      adjust.shift: [-2.2, 5/2]
+  # Hotswap socket, relatively positioned
+  _casebottom_hss_raw:
+    - what: outline
+      name: _casebottom_hss_shape
+      adjust.shift: [2.5,-4.9] # Relative to key center
+  # Switch peg + diode, relatively positioned
+  _casebottom_peg_diode_raw:
+    - what: circle
+      radius: 5.5/2
+    - what: rectangle
+      size: [5, 2.6]
+      adjust.shift: [0, 3.3]
+  # All switch component cutouts
+  _casebottom_switch_components_cutout:
+    - what: outline
+      name: _casebottom_hss_raw
+      fillet: 1
+    - what: outline
+      name: _casebottom_peg_diode_raw
+      fillet: 1
+  # "Base plate" for the bat cage
+  _casebottom_bat_cage_base:
+    - where: [main_c0_r2]
+      what: rectangle
+      size: [18, 44.5]
+      adjust.shift: [-.5, 31.25]
+  # Battery cage
+  _casebottom_bat_cage_cutouts:
+    - where: [screw_7]
+      what: circle
+      radius: screw_throughhole_r
+    - where: [main_c0_r2] # Cage cutout
+      what: rectangle
+      size: [16, 5]
+      adjust.shift: [-1, 42]
+    - where: [main_c0_r2]
+      what: rectangle
+      size: [16, 5]
+      adjust.shift: [-1, 42-5-3]
+    - where: [main_c0_r2]
+      what: rectangle
+      size: [16, 5]
+      adjust.shift: [-1, 42-10-6]
+    - where: [main_c0_r2]
+      what: rectangle
+      size: [16, 5]
+      adjust.shift: [-1, 42-15-9]
+  # Standoff post for bat cage screw
+  _casebottom_bat_cage_screw_standoff:
+    - where: [screw_7]
+      what: circle
+      radius: 2.5
+    - where: [screw_7]
+      what: circle
+      radius: screw_throughhole_r
+      operation: subtract
+  # Power + Reset switch cutouts
+  _casebottom_io_cutout:
+    - where: [mcu] # Reset switch
+      what: rectangle
+      size: [7.5, 4.9]
+      adjust.shift: [-25, mcu_h/2-2.05]
+    - where: [mcu] # Power switch
+      what: rectangle
+      size: [8.7, 5.2]
+      adjust.shift: [-15, mcu_h/2-2.2]
+    - where: [mcu] # Power / Reset switch patch
+      what: rectangle
+      size: [3, 6]
+      adjust.shift: [-20, mcu_h/2-2]
+    - where: [mcu] # Actuator cutout
+      what: rectangle
+      size: [16.5, 3]
+      adjust.shift: [-18.9, mcu_h/2+1]
+  # Mcu pin solder recesses
+  _casebottom_mcu_solder_recess:
+    - where: [mcu]
+      what: rectangle
+      size: [3, mcu_h]
+      adjust.shift: [-7.5, 0]
+    - where: [mcu]
+      what: rectangle
+      size: [3, mcu_h]
+      adjust.shift: [7.5, 0]
+    - where: [mcu]
+      what: rectangle
+      size: [12.5, 13]
+      adjust.shift: [0, 10]
+  # Jst pin solder recesses
+  _casebottom_jst_solder_recess:
+    - where: [jst]
+      what: rectangle
+      size: [4.5, 5.5]
+      adjust.shift: [0,-1]
+  # Bottom base (pcb + bat cage) for footprint
+  _casebottom_plate_footprint_base:
+    - what: outline
+      name: effiddy_pcb
+    - what: outline
+      name: _casebottom_bat_cage_base
+  # Bottom footprint
+  _casebottom_plate_footprint:
+    - what: outline
+      name: _casebottom_plate_footprint_base
+      expand: 1.2>
+  # Bottom plate base
+  _casebottom_plate_base:
+    - what: outline
+      name: effiddy_pcb
+      expand: .2>
+  # Bottom plate wall
+  _casebottom_wall:
+    - what: outline
+      name: _casebottom_plate_footprint
+    - what: outline
+      name: _casebottom_plate_base
+      operation: subtract
+  # Bottom cutouts
+  _casebottom_cutouts:
+    - where: [key]
+      what: outline
+      name: _casebottom_switch_components_cutout
+    - what: outline
+      name: _casebottom_bat_cage_cutouts
+    - what: outline
+      name: _casebottom_io_cutout
+    - where: [pcb_screw] # PCB screw holes
+      what: circle
+      radius: screw_inserthole_r
+    - where: [screw_6] # Mcu screw hole
+      what: circle
+      radius: screw_throughhole_r
+  # All solder recesses
+  _casebottom_solder_recesses:
+    - what: outline
+      name: _casebottom_mcu_solder_recess
+    - what: outline
+      name: _casebottom_jst_solder_recess
+  # Preview
+  preview_case_bottom:
+    - what: outline
+      name: _casebottom_cutouts
+    - what: outline
+      name: _casebottom_wall
+      operation: stack
+    - what: outline
+      name: _casebottom_bat_cage_base
+      operation: stack
+    - what: outline
+      name: _casebottom_bat_cage_screw_standoff
+      operation: stack
+    - what: outline
+      name: _casebottom_solder_recesses
+      operation: stack
 
 pcbs:
   effiddy:
@@ -280,10 +650,8 @@ pcbs:
           hotswap: true
           choc_v1_support: true
           include_stabilizer_pad: false
-
           include_plated_holes: true
           include_centerhole_net: true
-
           hotswap_pads_same_side: false
           locked_traces_vias: true # Not movable
           outer_pad_width_front: 2
@@ -357,7 +725,69 @@ pcbs:
           hole_drill: 2.2
 
 cases:
-  switchplate:
+  effiddy_case_top:
+    - what: outline
+      name: _case_boxes
+      extrude: 7 + switchplate_d
+    - what: outline
+      name: _case_boxes_negative_bat_jst
+      extrude: 6
+      operation: subtract
+    - what: outline
+      name: _case_boxes_screw_standoff_bat
+      extrude: 6 + switchplate_d
+
+    - what: outline
+      name: _case_wall_hug
+      extrude: switchplate_d
+    - what: outline
+      name: _case_boxes_bottom_patch
+      extrude: switchplate_d
+    - what: outline
+      name: _case_plate_screw_1_patch
+      extrude: switchplate_d
     - what: outline
       name: _case_plate
       extrude: switchplate_d
+
+    # Remove this at the end so we do not have a bridge created by
+    # the usb-c and the switchplate
+    - what: outline
+      name: _case_boxes_negative_mcu
+      extrude: 4
+      operation: subtract
+    # Remove this at the end so that the hole also affects the wall
+    - what: outline
+      name: _case_boxes_screw_standoff_bat_hole
+      extrude: 5
+      operation: subtract
+    - what: outline
+      name: _case_boxes_screw_standoff_mcu_hole
+      extrude: 5
+      operation: subtract
+
+  effiddy_case_bottom:
+    - what: outline
+      name: _casebottom_plate_footprint
+      extrude: 2+1.6
+    - what: outline
+      name: _casebottom_plate_base
+      extrude: 1.6
+      operation: subtract
+    - what: outline
+      name: _casebottom_bat_cage_base
+      extrude: 1
+      operation: subtract
+    - what: outline
+      name: _casebottom_bat_cage_screw_standoff
+      extrude: 2+1.6
+
+    - what: outline
+      name: _casebottom_solder_recesses
+      extrude: 1.1+1.6
+      operation: subtract
+
+    - what: outline
+      name: _casebottom_cutouts
+      extrude: 2+1.6
+      operation: subtract
