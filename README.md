@@ -3,6 +3,9 @@
 # effiddy
 A 50-key, column-staggered, wireless split keyboard, inspired by Totem. Designed for Choc-spacing (16.5 by 17.5mm keycaps) and 1350 Choc v1 or v2 switches.
 
+![20260310_003549](https://github.com/user-attachments/assets/89ab8a09-8f08-4376-9ef7-325b410bb693)
+> Kailh Choc v2 Ice Creams, Repo-included 3D printed keycaps
+
 ## Effi.. what?
 /ˈɛfɪdi/
 
@@ -21,7 +24,9 @@ Effiddy adopts this spirit in a minimalist, abstract form — part artifact, par
 
 ## Impressions
 
+![20260310_003650](https://github.com/user-attachments/assets/a73f3b27-2803-4cbe-9ff7-ae9a2f556039)
 
+![20260310_003707](https://github.com/user-attachments/assets/d665196e-a10f-4c50-8dfe-ff964810d0f0)
 
 ---
 
@@ -118,6 +123,8 @@ For each half:
 > If you run into trouble, there's also a `settings_reset` firmware provided in the archive. See [the ZMK troubleshooting guide](https://zmk.dev/docs/troubleshooting/connection-issues#reset-split-keyboard-procedure) on how to flash it.
 
 ### Assembly
+
+![20260309_230351](https://github.com/user-attachments/assets/17686b07-f33e-45c9-8186-b2618edbddac)
 
 1. Prep the case tops by installing the two heat set inserts and removing support material. In my case, I have used SMD JST connectors which are a bit too wide for the channel in the case which was resolved with a bit of surgery with a sharp utility knife.
 2. Connect the battery. Mount the top case.
