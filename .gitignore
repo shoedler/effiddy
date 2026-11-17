@@ -2,3 +2,8 @@
 .zmk/
 temp.*
 fp-info-cache
+
+# ergogen / case tooling
+tools/node_modules/
+tools/vendor/
+out/

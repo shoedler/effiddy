@@ -1,0 +1,33 @@
+{
+  "name": "effiddy-tools",
+  "private": true,
+  "type": "module",
+  "description": "Local ergogen build + verification tooling for effiddy",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "setup": "npm install && npm run footprints",
+    "footprints": "node fetch-footprints.ts",
+    "build": "node build.ts",
+    "cases": "node cases.ts",
+    "check": "node check.ts",
+    "drc": "node drc.ts",
+    "drc-lite": "node drc-lite.ts",
+    "render": "node render.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test \"test/**/*.test.ts\""
+  },
+  "dependencies": {
+    "@jscad/csg": "^0.7.0",
+    "@resvg/resvg-js": "^2.6.2",
+    "ergogen": "^4.2.1",
+    "js-yaml": "^4.1.0",
+    "jszip": "^3.10.1"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0"
+  }
+}

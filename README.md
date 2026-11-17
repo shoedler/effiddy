@@ -62,6 +62,17 @@ I do not suggest rerouting the PCB for fun. There's premade gerber archive locat
 > [!NOTE]
 > There's also a 3d render (.stl) of the assembled PCB in the `kicad` directory if you want to model your own case.
 
+### Modifying the design
+
+> [!TIP]
+> There is a local toolchain in [`tools/`](tools/README.md) that builds the config without
+> ergogen.xyz (seconds instead of minutes for the bottom cases) and then checks it: switch fit
+> in both bottom cases (centre posts and Choc v1 pegs), a pre-routing DRC on the generated board,
+> STL/cross-section/point-probe inspection of the printed parts, and layered drawings. Start
+> with `cd tools && npm run setup`, then `node tools/build.ts` and `node tools/check.ts`. Its
+> README also documents the footprint rotation convention that ergogen + KiCad make easy to get
+> backwards.
+
 ### Printing the case
 
 > Case files are located in the `stl` directory.
